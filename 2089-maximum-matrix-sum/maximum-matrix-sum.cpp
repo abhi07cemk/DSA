@@ -15,7 +15,7 @@ public:
             }
         }
 
-        // If odd number of negatives, one smallest abs value stays negative
+     
         if (negCount % 2 == 1) {
             sum -= 2LL * minAbs;
         }
