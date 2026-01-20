@@ -1,27 +1,28 @@
 class Solution {
 public:
-    int partition(vector<int>& nums, int low, int high) {
-        int pivot = nums[low];
-        int i = low - 1, j = high + 1;
+    void quickSort(vector<int>& nums, int low, int high)
+    {
+        if (low >= high) return;
 
-        while (true) {
-            do { i++; } while (nums[i] < pivot);
-            do { j--; } while (nums[j] > pivot);
+        int pivot = nums[low + rand() % (high - low + 1)];
+        int lt = low, gt = high, i = low;
 
-            if (i >= j) return j;
-            swap(nums[i], nums[j]);
+        while (i <= gt)
+        {
+            if (nums[i] < pivot)
+                swap(nums[i++], nums[lt++]);
+            else if (nums[i] > pivot)
+                swap(nums[i], nums[gt--]);
+            else
+                i++;
         }
-    }
 
-    void quickSort(vector<int>& nums, int low, int high) {
-        while (low < high) {
-            int p = partition(nums, low, high);
-            quickSort(nums, low, p);
-            low = p + 1; 
-        }
+        quickSort(nums, low, lt - 1);
+        quickSort(nums, gt + 1, high);
     }
 
     vector<int> sortArray(vector<int>& nums) {
+        srand(time(0));
         quickSort(nums, 0, nums.size() - 1);
         return nums;
     }
