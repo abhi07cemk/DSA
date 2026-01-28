@@ -1,47 +1,60 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
 class Solution {
 private:
-    bool checkPalindrome(vector<int> arr)
+    ListNode* getMid(ListNode* head)
     {
-        int n = arr.size();
-        int s = 0;
-        int e = n-1;
+        ListNode* slow = head;
+        ListNode* fast = head->next;
 
-        while(s <= e)
+        while (fast != NULL && fast->next != NULL)
         {
-            if(arr[s] != arr[e])
-            {
-                return false;
-            }
-            else
-            {
-                s++;
-                e--;
-            }
+            fast = fast->next->next;
+            slow = slow->next;
         }
-        return true;
+        return slow;
     }
+
+    ListNode* reverse(ListNode* head)
+    {
+        ListNode* curr = head;
+        ListNode* prev = NULL;
+
+        while (curr != NULL)
+        {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+
 public:
     bool isPalindrome(ListNode* head) {
-        vector<int> arr;
+        if (head == NULL || head->next == NULL)
+            return true;
 
-        ListNode* temp = head;
+        // Step 1: find middle
+        ListNode* middle = getMid(head);
 
-        while(temp != NULL)
+        // Step 2: reverse second half
+        middle->next = reverse(middle->next);
+
+        // Step 3: compare both halves
+        ListNode* head1 = head;
+        ListNode* head2 = middle->next;
+
+        while (head2 != NULL)
         {
-            arr.push_back(temp -> val);
-            temp = temp -> next;
+            if (head1->val != head2->val)
+                return false;
+
+            head1 = head1->next;
+            head2 = head2->next;
         }
 
-        return checkPalindrome(arr);
+        // Step 4: restore list
+        middle->next = reverse(middle->next);
+
+        return true;
     }
 };
