@@ -1,25 +1,31 @@
 class Solution {
- public:
-  bool isValid(string s) {
-    stack<char> stack;
+public:
+    bool isValid(string s) {
+        stack<char> st;
 
-    for (const char c : s)
-      if (c == '(')
-        stack.push(')');
-      else if (c == '{')
-        stack.push('}');
-      else if (c == '[')
-        stack.push(']');
-      else if (stack.empty() || pop(stack) != c)
-        return false;
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s[i];
 
-    return stack.empty();
-  }
+            // Opening brackets
+            if (ch == '(' || ch == '{' || ch == '[') {
+                st.push(ch);
+            }
+            // Closing brackets
+            else {
+                if (st.empty()) return false;
 
- private:
-  int pop(stack<char>& stack) {
-    const int c = stack.top();
-    stack.pop();
-    return c;
-  }
+                char top = st.top();
+                if ((ch == ')' && top == '(') ||
+                    (ch == '}' && top == '{') ||
+                    (ch == ']' && top == '[')) {
+                    st.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        // Stack should be empty for valid parentheses
+        return st.empty();
+    }
 };
