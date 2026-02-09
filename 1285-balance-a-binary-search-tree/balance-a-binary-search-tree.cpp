@@ -19,7 +19,7 @@ public:
         inorder(root->right, in);
     }
 
-    TreeNode* inorderToBST(int s, int e, vector<int> in)
+    TreeNode* inorderToBST(int s, int e, vector<int> &in)
     {
         if(s>e)
         {
