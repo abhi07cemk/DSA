@@ -1,31 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
 public:
-    // Step 1: Inorder traversal to get sorted elements
-    void inorder(TreeNode* root, vector<int>& nodes) {
+    void inorder(TreeNode* root, vector<int>& in) {
         if (root == NULL) return;
 
-        inorder(root->left, nodes);
-        nodes.push_back(root->val);
-        inorder(root->right, nodes);
+        inorder(root->left, in);
+        in.push_back(root->val);
+        inorder(root->right, in);
     }
 
-    // Step 2: Build balanced BST from sorted array
-    TreeNode* buildBST(vector<int>& nodes, int start, int end) {
-        if (start > end) return NULL;
+    TreeNode* inorderToBST(int s, int e, vector<int> in)
+    {
+        if(s>e)
+        {
+            return NULL;
+        }
 
-        int mid = start + (end - start) / 2;
-        TreeNode* root = new TreeNode(nodes[mid]);
+        int mid = (s+e)/2;
 
-        root->left = buildBST(nodes, start, mid - 1);
-        root->right = buildBST(nodes, mid + 1, end);
+        TreeNode* root = new TreeNode(in[mid]);
 
+        root->left = inorderToBST(s,mid-1, in);
+        root->right = inorderToBST(mid+1,e,in);
         return root;
     }
 
     TreeNode* balanceBST(TreeNode* root) {
-        vector<int> nodes;
+        vector<int> inorderVal;
+        inorder(root, inorderVal);
 
-        inorder(root, nodes);                 
-        return buildBST(nodes, 0, nodes.size() - 1); 
+        return inorderToBST(0, inorderVal.size()-1, inorderVal);
+
     }
 };
